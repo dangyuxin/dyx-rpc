@@ -1,7 +1,5 @@
 package cn.dyx.dyxrpc.config;
 
-
-import cn.dyx.dyxrpc.serializer.Serializer;
 import cn.dyx.dyxrpc.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -39,7 +37,12 @@ public class RpcConfig {
     /**
      * 序列化器
      */
-    private String serializer = SerializerKeys.JSON;
+    private String serializer = SerializerKeys.HESSIAN;
+
+    /**
+     * 注册中心配置
+     */
+    private RegistryConfig registryConfig = new RegistryConfig();
 
 }
 

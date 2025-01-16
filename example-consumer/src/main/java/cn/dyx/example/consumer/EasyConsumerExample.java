@@ -11,13 +11,13 @@ public class EasyConsumerExample {
     public static void main(String[] args) {
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
 
-        RpcConfig rpc = ConfigUtils.loadConfig(RpcConfig.class,"rpc");
-        System.out.println(rpc);
-
-        User user = new User();
-        user.setName("dangyuxin");
-        System.out.println(userService.getUser(user));
-
-        System.out.println(userService.getNumber());
+//        RpcConfig rpc = ConfigUtils.loadConfig(RpcConfig.class,"rpc");
+//        System.out.println(rpc);
+//
+//        User user = new User();
+//        user.setName("dangyuxin");
+//        System.out.println(userService.getUser(user));
+//
+//        System.out.println(userService.getNumber());
     }
 }

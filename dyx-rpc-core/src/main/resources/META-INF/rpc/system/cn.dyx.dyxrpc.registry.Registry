@@ -1,0 +1,2 @@
+etcd=cn.dyx.dyxrpc.registry.EtcdRegistry
+zookeeper=cn.dyx.dyxrpc.registry.ZooKeeperRegistry

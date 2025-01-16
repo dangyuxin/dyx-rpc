@@ -1,0 +1,4 @@
+jdk=cn.dyx.dyxrpc.serializer.JdkSerializer
+hessian=cn.dyx.dyxrpc.serializer.HessianSerializer
+json=cn.dyx.dyxrpc.serializer.JsonSerializer
+kryo=cn.dyx.dyxrpc.serializer.KryoSerializer

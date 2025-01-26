@@ -8,14 +8,11 @@ import cn.dyx.dyxrpc.model.RpcResponse;
 import cn.dyx.dyxrpc.model.ServiceMetaInfo;
 import cn.dyx.dyxrpc.registry.Registry;
 import cn.dyx.dyxrpc.registry.RegistryFactory;
-import cn.dyx.dyxrpc.serializer.JdkSerializer;
 import cn.dyx.dyxrpc.serializer.Serializer;
 import cn.dyx.dyxrpc.serializer.SerializerFactory;
+import cn.dyx.dyxrpc.server.tcp.VertxTcpClient;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -45,9 +42,6 @@ public class ServiceProxy implements InvocationHandler {
                 .args(args)
                 .build();
         try {
-            // 序列化
-            byte[] bodyBytes = serializer.serialize(rpcRequest);
-
             // 从注册中心获取服务提供者请求地址
             RpcConfig rpcConfig = RpcApplication.getRpcConfig();
             Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
@@ -59,20 +53,14 @@ public class ServiceProxy implements InvocationHandler {
                 throw new RuntimeException("暂无服务地址");
             }
             ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
-
-            // 发送请求
-            try (HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
-                    .body(bodyBytes)
-                    .execute()) {
-                byte[] result = httpResponse.bodyBytes();
-                // 反序列化
-                RpcResponse rpcResponse = serializer.deserialize(result, RpcResponse.class);
-                return rpcResponse.getData();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("服务信息--> "+selectedServiceMetaInfo.getServiceNodeKey());
+            // 发送 TCP 请求
+            RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+            return rpcResponse.getData();
+        } catch (Exception e) {
+            System.out.println("error:"+e.getMessage());
+            throw new RuntimeException("调用失败");
         }
-
-        return null;
     }
+
 }

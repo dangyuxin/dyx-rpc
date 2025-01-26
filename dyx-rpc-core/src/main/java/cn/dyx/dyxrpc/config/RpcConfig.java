@@ -37,7 +37,7 @@ public class RpcConfig {
     /**
      * 序列化器
      */
-    private String serializer = SerializerKeys.HESSIAN;
+    private String serializer = SerializerKeys.JSON;
 
     /**
      * 注册中心配置

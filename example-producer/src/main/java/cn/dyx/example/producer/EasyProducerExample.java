@@ -9,6 +9,7 @@ import cn.dyx.dyxrpc.registry.Registry;
 import cn.dyx.dyxrpc.registry.RegistryFactory;
 import cn.dyx.dyxrpc.server.HttpServer;
 import cn.dyx.dyxrpc.server.VertxHttpServer;
+import cn.dyx.dyxrpc.server.tcp.VertxTcpServer;
 import cn.dyx.example.common.service.UserService;
 
 public class EasyProducerExample {
@@ -35,7 +36,9 @@ public class EasyProducerExample {
         }
 
         // 启动 web 服务
-        HttpServer httpServer = new VertxHttpServer();
-        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+//        HttpServer httpServer = new VertxHttpServer();
+//        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+        VertxTcpServer vertxTcpServer = new VertxTcpServer();
+        vertxTcpServer.doStart(8077);
     }
 }

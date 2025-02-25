@@ -3,6 +3,10 @@ package cn.dyx.dyxrpc.proxy;
 import cn.dyx.dyxrpc.RpcApplication;
 import cn.dyx.dyxrpc.config.RpcConfig;
 import cn.dyx.dyxrpc.constant.RpcConstant;
+import cn.dyx.dyxrpc.fault.retry.RetryStrategy;
+import cn.dyx.dyxrpc.fault.retry.RetryStrategyFactory;
+import cn.dyx.dyxrpc.fault.tolerant.TolerantStrategy;
+import cn.dyx.dyxrpc.fault.tolerant.TolerantStrategyFactory;
 import cn.dyx.dyxrpc.loadbalancer.LoadBalancer;
 import cn.dyx.dyxrpc.loadbalancer.LoadBalancerFactory;
 import cn.dyx.dyxrpc.model.RpcRequest;
@@ -65,7 +69,17 @@ public class ServiceProxy implements InvocationHandler {
             ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
 
             // rpc 请求
-            RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+            RpcResponse rpcResponse;
+            try {
+                RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+                rpcResponse = retryStrategy.doRetry(() ->
+                        VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+                );
+            } catch (Exception e) {
+                // 容错机制
+                TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+                rpcResponse = tolerantStrategy.doTolerant(null, e);
+            }
             return rpcResponse.getData();
         } catch (Exception e) {
             throw new RuntimeException("调用失败");

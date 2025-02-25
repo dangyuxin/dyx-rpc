@@ -1,0 +1,2 @@
+no=cn.dyx.dyxrpc.fault.retry.NoRetryStrategy
+fixedInterval=cn.dyx.dyxrpc.fault.retry.FixedIntervalRetryStrategy

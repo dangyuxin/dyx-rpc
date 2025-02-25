@@ -1,5 +1,7 @@
 package cn.dyx.dyxrpc.config;
 
+import cn.dyx.dyxrpc.fault.retry.RetryStrategyKeys;
+import cn.dyx.dyxrpc.fault.tolerant.TolerantStrategyKeys;
 import cn.dyx.dyxrpc.loadbalancer.LoadBalancer;
 import cn.dyx.dyxrpc.loadbalancer.LoadBalancerFactory;
 import cn.dyx.dyxrpc.loadbalancer.LoadBalancerKeys;
@@ -50,8 +52,15 @@ public class RpcConfig {
     /**
      * 负载均衡器配置
      */
-
     private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+    /**
+     * 重试策略
+     */
+    private String retryStrategy = RetryStrategyKeys.NO;
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_FAST;
 
 }
 

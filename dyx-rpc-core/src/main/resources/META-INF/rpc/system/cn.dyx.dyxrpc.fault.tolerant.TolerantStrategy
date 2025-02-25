@@ -1,0 +1,4 @@
+failBack=cn.dyx.dyxrpc.fault.tolerant.FailBackTolerantStrategy
+failFast=cn.dyx.dyxrpc.fault.tolerant.FailFastTolerantStrategy
+failOver=cn.dyx.dyxrpc.fault.tolerant.FailOverTolerantStrategy
+failSafe=cn.dyx.dyxrpc.fault.tolerant.FailSafeTolerantStrategy
